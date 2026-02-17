@@ -1,0 +1,51 @@
+---
+- name: Set hostname to match inventory
+  command: hostnamectl set-hostname {{ inventory_hostname }}
+  changed_when: false
+
+- name: Restart RabbitMQ
+  systemd:
+    name: rabbitmq-server
+    state: restarted
+  changed_when: false
+
+# Fetch cookie from master
+- name: Fetch Erlang cookie
+  fetch:
+    src: /var/lib/rabbitmq/.erlang.cookie
+    dest: /tmp/.erlang.cookie
+    flat: yes
+  when: inventory_hostname == rabbitmq_master
+
+# Copy cookie to other nodes
+- name: Copy cookie to nodes
+  copy:
+    src: /tmp/.erlang.cookie
+    dest: /var/lib/rabbitmq/.erlang.cookie
+    owner: rabbitmq
+    group: rabbitmq
+    mode: "0400"
+  when: inventory_hostname != rabbitmq_master
+  notify: restart rabbitmq
+
+- name: Restart RabbitMQ on non-master
+  systemd:
+    name: rabbitmq-server
+    state: restarted
+  when: inventory_hostname != rabbitmq_master
+  changed_when: false
+
+- name: Stop RabbitMQ app (non-master)
+  command: rabbitmqctl stop_app
+  when: inventory_hostname != rabbitmq_master
+  changed_when: false
+
+- name: Join cluster
+  command: rabbitmqctl join_cluster rabbit@{{ rabbitmq_master }}
+  when: inventory_hostname != rabbitmq_master
+  changed_when: false
+
+- name: Start RabbitMQ app
+  command: rabbitmqctl start_app
+  when: inventory_hostname != rabbitmq_master
+  changed_when: false

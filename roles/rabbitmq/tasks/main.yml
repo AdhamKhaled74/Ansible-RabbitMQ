@@ -1,0 +1,7 @@
+---
+# tasks file for rabbitmq
+- import_tasks: install.yml
+- import_tasks: config.yml
+- import_tasks: cluster.yml
+- import_tasks: users.yml
+- import_tasks: verify.yml

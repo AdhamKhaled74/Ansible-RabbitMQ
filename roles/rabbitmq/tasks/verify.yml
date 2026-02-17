@@ -1,0 +1,11 @@
+---
+- name: Check cluster status
+  command: rabbitmqctl cluster_status
+  when: inventory_hostname == rabbitmq_master
+  register: cluster_status
+  changed_when: false
+
+- name: Show cluster status
+  debug:
+    var: cluster_status.stdout
+  when: inventory_hostname == rabbitmq_master

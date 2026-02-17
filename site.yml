@@ -1,0 +1,6 @@
+---
+- name: Install and Configure RabbitMQ Cluster
+  hosts: rabbitmq-cluster
+  become: true
+  roles:
+    - rabbitmq

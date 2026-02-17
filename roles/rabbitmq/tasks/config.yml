@@ -1,0 +1,12 @@
+---
+- name: Deploy rabbitmq.conf
+  template:
+    src: rabbitmq.conf.j2
+    dest: /etc/rabbitmq/rabbitmq.conf
+  notify: restart rabbitmq
+
+- name: Enable management plugin
+  command: rabbitmq-plugins enable rabbitmq_management
+  when: rabbitmq_enable_management
+  changed_when: false
+  notify: restart rabbitmq

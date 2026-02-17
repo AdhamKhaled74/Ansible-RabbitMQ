@@ -1,0 +1,139 @@
+---
+- name: Decide RabbitMQ repo family (el8 vs el9)
+  set_fact:
+    rabbitmq_repo_el: >-
+      {{
+        9 if (ansible_distribution in ['Amazon', 'RedHat', 'Rocky', 'AlmaLinux', 'OracleLinux']
+              and (ansible_distribution_major_version | int >= 9
+                   or ansible_distribution_major_version == '2023'))
+        else 8
+      }}
+
+# ---------------------------------------------------------------
+# Import signing keys (as in docs)
+# ---------------------------------------------------------------
+- name: Import primary RabbitMQ signing key
+  rpm_key:
+    state: present
+    key: https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+
+- name: Import modern Erlang repository key
+  rpm_key:
+    state: present
+    key: https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key
+
+- name: Import RabbitMQ server repository key
+  rpm_key:
+    state: present
+    key: https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key
+
+# ---------------------------------------------------------------
+# Add Yum repository file /etc/yum.repos.d/rabbitmq.repo
+# (repo contents from RabbitMQ official docs)
+# ---------------------------------------------------------------
+- name: Install rabbitmq.repo file
+  copy:
+    dest: /etc/yum.repos.d/rabbitmq.repo
+    mode: "0644"
+    content: |
+      ##
+      ## Zero dependency Erlang RPM
+      ##
+      [modern-erlang]
+      name=modern-erlang-el{{ rabbitmq_repo_el }}
+      # Use a set of mirrors maintained by the RabbitMQ core team.
+      # The mirrors have significantly higher bandwidth quotas.
+      baseurl=https://yum1.rabbitmq.com/erlang/el/{{ rabbitmq_repo_el }}/$basearch
+              https://yum2.rabbitmq.com/erlang/el/{{ rabbitmq_repo_el }}/$basearch
+      repo_gpgcheck=1
+      enabled=1
+      gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key
+      gpgcheck=1
+      sslverify=1
+      sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+      metadata_expire=300
+      pkg_gpgcheck=1
+      autorefresh=1
+      type=rpm-md
+
+      [modern-erlang-noarch]
+      name=modern-erlang-el{{ rabbitmq_repo_el }}-noarch
+      # Use a set of mirrors maintained by the RabbitMQ core team.
+      # The mirrors have significantly higher bandwidth quotas.
+      baseurl=https://yum1.rabbitmq.com/erlang/el/{{ rabbitmq_repo_el }}/noarch
+              https://yum2.rabbitmq.com/erlang/el/{{ rabbitmq_repo_el }}/noarch
+      repo_gpgcheck=1
+      enabled=1
+      gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key
+             https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+      gpgcheck=1
+      sslverify=1
+      sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+      metadata_expire=300
+      pkg_gpgcheck=1
+      autorefresh=1
+      type=rpm-md
+
+      ##
+      ## RabbitMQ Server
+      ##
+      [rabbitmq-el{{ rabbitmq_repo_el }}]
+      name=rabbitmq-el{{ rabbitmq_repo_el }}
+      baseurl=https://yum2.rabbitmq.com/rabbitmq/el/{{ rabbitmq_repo_el }}/$basearch
+              https://yum1.rabbitmq.com/rabbitmq/el/{{ rabbitmq_repo_el }}/$basearch
+      repo_gpgcheck=1
+      enabled=1
+      # Cloudsmith's repository key and RabbitMQ package signing key
+      gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key
+             https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+      gpgcheck=1
+      sslverify=1
+      sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+      metadata_expire=300
+      pkg_gpgcheck=1
+      autorefresh=1
+      type=rpm-md
+
+      [rabbitmq-el{{ rabbitmq_repo_el }}-noarch]
+      name=rabbitmq-el{{ rabbitmq_repo_el }}-noarch
+      baseurl=https://yum2.rabbitmq.com/rabbitmq/el/{{ rabbitmq_repo_el }}/noarch
+              https://yum1.rabbitmq.com/rabbitmq/el/{{ rabbitmq_repo_el }}/noarch
+      repo_gpgcheck=1
+      enabled=1
+      # Cloudsmith's repository key and RabbitMQ package signing key
+      gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key
+             https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+      gpgcheck=1
+      sslverify=1
+      sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+      metadata_expire=300
+      pkg_gpgcheck=1
+      autorefresh=1
+      type=rpm-md
+
+# ---------------------------------------------------------------
+# Install dependencies + Erlang + RabbitMQ (as in docs)
+# ---------------------------------------------------------------
+- name: Update package metadata
+  yum:
+    update_cache: yes
+
+- name: Install OS dependency packages
+  yum:
+    name:
+      - logrotate
+    state: present
+
+- name: Install Erlang and RabbitMQ server
+  yum:
+    name:
+      - erlang
+      - rabbitmq-server
+    state: present
+
+- name: Enable and start RabbitMQ
+  systemd:
+    name: rabbitmq-server
+    enabled: yes
+    state: started
+

@@ -1,0 +1,6 @@
+---
+# handlers file for rabbitmq
+- name: restart rabbitmq
+  systemd:
+    name: rabbitmq-server
+    state: restarted

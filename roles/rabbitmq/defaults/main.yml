@@ -1,0 +1,8 @@
+---
+rabbitmq_master: "rabbit1"
+
+rabbitmq_admin_user: "myadmin"
+rabbitmq_admin_pass: "StrongPass123!"
+
+rabbitmq_enable_management: true
+rabbitmq_delete_guest: true
