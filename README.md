@@ -146,9 +146,9 @@ sudo rabbitmqctl start_app
 
 - Use only `rabbit@<hostname>`, **not your SSH user** (`ec2-user`).
 
-# 📊 Deployment Screenshots
+# Deployment Screenshots
 
-## 🐰 RabbitMQ Management UI (Cluster Running)
+## RabbitMQ Management UI (Cluster Running)
 
 From the Management UI:
 
@@ -174,7 +174,7 @@ This screenshot shows:
 
 ---
 
-## 📊 Node Statistics (Per Node)
+## Node Statistics (Per Node)
 
 Each running node displays real-time metrics:
 
@@ -192,7 +192,7 @@ Each running node displays real-time metrics:
 - Limit: ~2.2 GiB
 - No memory alarm triggered
 
-### 💿 Disk Space
+### Disk Space
 
 - Free: ~6+ GiB
 - Disk alarm threshold not reached
@@ -202,11 +202,11 @@ Each running node displays real-time metrics:
 
 ---
 
-# 🏗 High Availability (HA) Configuration
+# High Availability (HA) Configuration
 
 In this RabbitMQ 3-node cluster, High Availability ensures that messages are not lost if one node fails.
 
-## 🔁 How HA Works
+## How HA Works
 
 - Queues are mirrored (replicated) across multiple nodes.
 - If the master queue node fails, a mirror is automatically promoted.
