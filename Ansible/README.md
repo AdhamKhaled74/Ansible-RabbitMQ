@@ -14,7 +14,11 @@ This project deploys a 3-node RabbitMQ cluster with:
 
 # Architecture
 
-![Ansible Architecture](Ansibel.gif)
+<p align="center">
+  <img src="Ansibel.gif" width="500">
+</p>
+
+
 
 
 ```
