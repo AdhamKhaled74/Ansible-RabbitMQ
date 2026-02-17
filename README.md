@@ -27,7 +27,7 @@ This guide explains how to install, configure, and verify a **RabbitMQ cluster**
 
 It follows the Producer → Exchange → Queue → Consumer pattern.
 
-![RabbitMQ Architecture](RabbitMQ.png)
+![RabbitMQ Architecture](Manual-RabbitMQ/RabbitMQ.png)
 
 ---
 
@@ -35,7 +35,7 @@ It follows the Producer → Exchange → Queue → Consumer pattern.
 
 Below is the architecture for manually installing a RabbitMQ Cluster on 3 Amazon Linux EC2 nodes:
 
-![RabbitMQ Cluster Architecture](Manual_Installation.png)
+![RabbitMQ Cluster Architecture](Manual-RabbitMQ/Manual_Installation.png)
 
 ---
 
@@ -160,7 +160,7 @@ From the Management UI:
   - rabbit@rabbit2
   - rabbit@rabbit3
 
-![RabbitMQ Management UI](RabbitMQ-Pic.png)
+![RabbitMQ Management UI](Manual-RabbitMQ/RabbitMQ-Pic.png)
 
 This screenshot shows:
 
@@ -178,7 +178,7 @@ This screenshot shows:
 
 Each running node displays real-time metrics:
 
-![RabbitMQ Architecture](Running-Node.png)
+![RabbitMQ Architecture](Manual-RabbitMQ/Running-Node.png)
 
 ### ⚙ Erlang Processes
 
@@ -213,11 +213,11 @@ In this RabbitMQ 3-node cluster, High Availability ensures that messages are not
 - Clients can reconnect through a Load Balancer.
 - No message loss during single-node failure.
 
-![RabbitMQ HA Architecture](HA.png)
+![RabbitMQ HA Architecture](Manual-RabbitMQ/HA.png)
 
 ## ☁ AWS EC2 Instances (All Running)
 
-![AWS EC2 Instances](3-EC2.png)
+![AWS EC2 Instances](Manual-RabbitMQ/3-EC2.png)
 
 This screenshot confirms:
 
