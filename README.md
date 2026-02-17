@@ -215,14 +215,13 @@ In this RabbitMQ 3-node cluster, High Availability ensures that messages are not
 
 ![RabbitMQ HA Architecture](Manual-RabbitMQ/HA.png)
 
-## ☁ AWS EC2 Instances (All Running)
+## AWS EC2 Instances (RabbitMQ Cluster)
 
 ![AWS EC2 Instances](Manual-RabbitMQ/3-EC2.png)
 
 This screenshot confirms:
 
 - 3 RabbitMQ nodes (rabbit1, rabbit2, rabbit3)
-- 1 Ansible control server
 - All instances running
 - Status checks passed (3/3)
 
