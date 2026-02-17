@@ -14,6 +14,9 @@ This project deploys a 3-node RabbitMQ cluster with:
 
 # Architecture
 
+![Ansible Architecture](Ansibel.gif)
+
+
 ```
                     +------------------------+
                     |   Ansible Control VM   |
@@ -116,6 +119,8 @@ Expected:
 # Deployment Screenshots
 
 ## RabbitMQ Management UI (Cluster Running)
+
+![RabbitMQ Cluster](Cluster.png)
 
 ![RabbitMQ Management UI](rabbitmq_management_ui.png)
 
