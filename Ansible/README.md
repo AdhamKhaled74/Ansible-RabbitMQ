@@ -24,7 +24,7 @@
 
 ------------------------------------------------------------------------
 
-# 📁 Project Structure
+# Project Structure
 
     rabbitmq-project/
     ├── inventory.ini
@@ -45,20 +45,20 @@
 
 ------------------------------------------------------------------------
 
-# 📦 inventory.ini
+# inventory.ini
 
     [rabbitmq]
     rabbit1 ansible_host=10.0.1.10
     rabbit2 ansible_host=10.0.1.11
     rabbit3 ansible_host=10.0.1.12
 
-    [rabbitmq:vars]
+    <!-- [rabbitmq:vars]
     ansible_user=ec2-user
-    ansible_ssh_private_key_file=~/.ssh/id_rsa
+    ansible_ssh_private_key_file=~/.ssh/id_rsa -->
 
 ------------------------------------------------------------------------
 
-# ▶ site.yml
+# site.yml  (The Main playbook that calls the ansible role)
 
     ---
     - name: Install and Configure RabbitMQ Cluster
@@ -69,7 +69,7 @@
 
 ------------------------------------------------------------------------
 
-# 🧠 defaults/main.yml
+# defaults/main.yml
 
     ---
     rabbitmq_master: "rabbit1"
@@ -80,7 +80,7 @@
 
 ------------------------------------------------------------------------
 
-# 🔧 handlers/main.yml
+# handlers/main.yml
 
     ---
     - name: restart rabbitmq
@@ -90,7 +90,7 @@
 
 ------------------------------------------------------------------------
 
-# 🛠 tasks/install.yml
+# tasks/install.yml
 
     ---
     - name: Install Erlang and RabbitMQ
@@ -108,7 +108,7 @@
 
 ------------------------------------------------------------------------
 
-# ⚙ tasks/config.yml
+# tasks/config.yml
 
     ---
     - name: Deploy rabbitmq.conf
@@ -125,7 +125,7 @@
 
 ------------------------------------------------------------------------
 
-# 🔗 tasks/cluster.yml
+# tasks/cluster.yml
 
     ---
     - name: Stop RabbitMQ app (non-master)
@@ -146,10 +146,10 @@
 
 ------------------------------------------------------------------------
 
-# 👤 tasks/users.yml
+# tasks/users.yml
 
     ---
-    - name: Add admin user (master only)
+    - name: Add admin user (Master only)
       command: rabbitmqctl add_user {{ rabbitmq_admin_user }} {{ rabbitmq_admin_pass }}
       when: inventory_hostname == rabbitmq_master
       ignore_errors: yes
@@ -169,7 +169,7 @@
 
 ------------------------------------------------------------------------
 
-# 🔎 tasks/verify.yml
+# tasks/verify.yml
 
     ---
     - name: Check cluster status
@@ -184,7 +184,7 @@
 
 ------------------------------------------------------------------------
 
-# 🔐 Required AWS Security Group Ports
+# Required AWS Security Group Ports
 
   Port          Purpose
   ------------- ---------------------------
@@ -196,7 +196,7 @@
 
 ------------------------------------------------------------------------
 
-# ✅ Final Verification
+# Final Verification
 
     sudo rabbitmqctl cluster_status
 
@@ -206,7 +206,7 @@ Expected:
 
 ------------------------------------------------------------------------
 
-# 🚀 Result
+# Result
 
 ✔ 3-node RabbitMQ cluster\
 ✔ Management UI enabled\
@@ -220,9 +220,9 @@ End of Document.
 
 ---
 
-# 📊 Deployment Screenshots
+# Deployment Screenshots
 
-## 🐰 RabbitMQ Management UI (Cluster Running)
+## RabbitMQ Management UI (Cluster Running)
 
 ![RabbitMQ Management UI](rabbitmq_management_ui.png)
 
@@ -235,7 +235,7 @@ This screenshot shows:
 
 ---
 
-## ☁ AWS EC2 Instances (All Running)
+## AWS EC2 Instances (All Running)
 
 ![AWS EC2 Instances](aws_ec2_instances.png)
 
