@@ -15,7 +15,7 @@ This project deploys a 3-node RabbitMQ cluster with:
 # Architecture
 
 <p align="center">
-  <img src="Ansibel.gif" width="500">
+  <img src="Ansibel.gif" width="800">
 </p>
 
 
