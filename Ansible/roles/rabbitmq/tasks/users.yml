@@ -1,24 +1,24 @@
 ---
 - name: Add admin user (master only)
   command: rabbitmqctl add_user {{ rabbitmq_admin_user }} {{ rabbitmq_admin_pass }}
-  when: inventory_hostname == rabbitmq_master
+  when: inventory_hostname == {{ rabbitmq_master }}
   register: add_user_out
   failed_when: add_user_out.rc != 0 and "already exists" not in (add_user_out.stderr | default(""))
   changed_when: add_user_out.rc == 0
 
 - name: Set admin tag (master only)
   command: rabbitmqctl set_user_tags {{ rabbitmq_admin_user }} administrator
-  when: inventory_hostname == rabbitmq_master
+  when: inventory_hostname == {{ rabbitmq_master }}
   changed_when: false
 
 - name: Set admin permissions (master only)
   command: rabbitmqctl set_permissions -p / {{ rabbitmq_admin_user }} ".*" ".*" ".*"
-  when: inventory_hostname == rabbitmq_master
+  when: inventory_hostname == {{ rabbitmq_master }}
   changed_when: false
 
 - name: Delete guest user (optional, master only)
   command: rabbitmqctl delete_user guest
-  when: inventory_hostname == rabbitmq_master and rabbitmq_delete_guest
+  when: inventory_hostname == {{ rabbitmq_master }} and rabbitmq_delete_guest
   register: del_guest_out
   failed_when: del_guest_out.rc != 0 and "no_such_user" not in (del_guest_out.stderr | default(""))
   changed_when: del_guest_out.rc == 0
