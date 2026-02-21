@@ -180,13 +180,13 @@ Each running node displays real-time metrics:
 
 ![RabbitMQ Architecture](Manual-RabbitMQ/Running-Node.png)
 
-### ⚙ Erlang Processes
+### Erlang Processes
 
 - Used: ~300–400
 - Limit: 1,048,576
 - System operating within safe threshold
 
-### 💾 Memory Usage
+### Memory Usage
 
 - Used: ~120 MiB
 - Limit: ~2.2 GiB
