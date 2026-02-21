@@ -42,10 +42,10 @@
 
 - name: Join cluster
   command: rabbitmqctl join_cluster rabbit@{{ rabbitmq_master }}
-  when: inventory_hostname != rabbitmq_master
+  when: inventory_hostname != {{ rabbitmq_master }}
   changed_when: false
 
 - name: Start RabbitMQ app
   command: rabbitmqctl start_app
-  when: inventory_hostname != rabbitmq_master
+  when: inventory_hostname != {{ rabbitmq_master }}
   changed_when: false
