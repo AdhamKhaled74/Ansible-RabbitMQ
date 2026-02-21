@@ -45,6 +45,10 @@ This project deploys a 3-node RabbitMQ cluster with:
 
 # Project Structure
 
+```bash
+ansible-galaxy init rabbitmq-project
+```
+
 ```
 rabbitmq-project/
 ├── inventory.ini
